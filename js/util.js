@@ -53,9 +53,25 @@ var cnnutil = (function(exports){
     return '' + Math.floor(x*dd)/dd;
   }
 
+  var flatten = function(vec) {
+    var out = [];
+    for(var i = 0; i < vec.length; i++) {
+        if (vec[i] instanceof Array || 
+                vec[i] instanceof Float64Array || 
+                vec[i] instanceof Float32Array) 
+        {
+            out = out.concat(flatten(vec[i]));
+        } else {
+            out.push(vec[i]);
+        }
+    }
+    return out;
+  }
+
   exports = exports || {};
   exports.Window = Window;
   exports.maxmin = maxmin;
+  exports.flatten = flatten;
   exports.f2t = f2t;
   return exports;
 

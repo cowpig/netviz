@@ -135,6 +135,13 @@ function redGreenScale(value){
     return ["hsl(",hue,",100%,50%)"].join("");
 }
 
+function blackWhiteScale(value){
+    //value from 0 to 1
+    var scalar = Math.floor(256*value);
+    return "rgb("+scalar+", "+scalar+", "+scalar+")";
+    // return "grayscale(" + Math.floor(value*100) + "%)";
+}
+
 function NPGinit(FPS){
   //takes frames per secont to run at
   

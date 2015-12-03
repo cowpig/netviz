@@ -1,4 +1,4 @@
-var train = true;
+var train = false;
 var data, labels, N;
 var ss = 50.0; // scale for drawing
 
@@ -112,7 +112,7 @@ function spiral_data() {
   }
   N = data.length;
 }
- 
+
 function update(){
   // console.log("update");
   if (clicked === false){
@@ -137,8 +137,6 @@ function update(){
       var time = end - start;
           
       // console.log('loss = ' + avloss + ', 100 cycles through data in ' + time + 'ms');
-
-      updateNetVis();
     }
   }
 }
@@ -305,6 +303,8 @@ function draw(){
       visctx.stroke();
       visctx.fill();
     }
+
+    updateNetVis();
 }
 
 function mouseClick(x, y, shiftPressed, ctrlPressed){
@@ -448,7 +448,7 @@ function updateNetVis() {
 
   ///////////////////////////////////////
   // draw the neural network's architecture
-  nnctx.font = "30px Arial";
+  nnctx.font = "40px Arial";
   nnctx.fillStyle = "black";
   var left = (nncw - "INPUT".length*20 - pad*2) / 2 + ("INPUT".length*20 /2);
   var top = pad+30
@@ -457,24 +457,26 @@ function updateNetVis() {
 
   // draw nodes
   for(var i=0;i<nodes.length;i++){
+    // get weights for this layer
+    var ix = 1 + (i*2); // converts nodes layer to convnetjs net "fully connected" layer
+    var layer_weights = net['layers'][ix]["filters"].map(function(d) {return d.w});
+    var mm = cnnutil.maxmin(cnnutil.flatten(layer_weights));
+
     for(var j=0;j<nodes[i].length;j++){
       var c = nodes[i][j];
       if (c.s) {
         // console.log("drawing a selection");
-        nnctx.fillStyle = "black";
-        nnctx.strokeStyle = "black";
+        nnctx.fillStyle = "#001183";
+        nnctx.strokeStyle = "#001183";
       } else {
         // console.log("drawing a non-selection");
-        nnctx.fillStyle = "grey";
-        nnctx.strokeStyle = "grey";
+        nnctx.fillStyle = "#3672FF";
+        nnctx.strokeStyle = "#3672FF";
       }
       drawCircle(c.x, c.y, radi, nnctx);
 
-      // get weights for this layer
-      var ix = 1 + (i*2); // converts nodes layer to convnetjs net "fully connected" layer
       // console.log(ix);
-      var w = net['layers'][ix]["filters"][j]["w"];
-      var mm = cnnutil.maxmin(w);
+      var w = layer_weights[j];
 
       // draw each line that is an input to this node
       
@@ -488,6 +490,16 @@ function updateNetVis() {
 
         var normx = l.x1 + (l.x2 - l.x1)*norm;
         var normy = l.y1 + (l.y2 - l.y1)*norm;
+
+        var mm_unit = cnnutil.maxmin(layer_weights[j]);
+        var unit_norm = (w[k] - mm_unit.minv) / mm_unit.dv;
+        // console.log(layer_weights);
+        // console.log(mm);
+        // console.log(w);
+        // console.log(mm_unit);
+        // console.log(unit_norm);
+        // console.log(norm);
+        // console.log(blackWhiteScale(norm));
 
         wlocs.push({'x': normx, 'y': normy, 'w': w[k], 'norm':norm, 'l':l, 
                 'ref':[ix,j,k], 'min':mm.minv, 'max':mm.maxv, 'd':mm.dv});
@@ -508,8 +520,10 @@ function drawWeights() {
 
   for (var i=0; i<wlocs.length;i++){
     var w = wlocs[i];
-    nnctx.fillStyle = redGreenScale(w.norm);
-    drawCircle(w.x, w.y, 5, nnctx);
+    nnctx.fillStyle = blackWhiteScale(1-w.norm);
+    // console.log(w.unit_norm);
+    // console.log(nnctx.fillStyle);
+    drawCircle(w.x, w.y, 7, nnctx);
   }
 }
 
@@ -522,7 +536,7 @@ function nnMouseDown(x, y, shiftPressed, ctrlPressed) {
   $("#toggletrain").attr("value", "resume training");
 
   for (var i=0;i<wlocs.length;i++){
-    if (distance(x,y,wlocs[i].x,wlocs[i].y) < 5) {
+    if (distance(x,y,wlocs[i].x,wlocs[i].y) < 8) {
       clicked = wlocs[i];
     }
   }
@@ -531,7 +545,7 @@ function nnMouseDown(x, y, shiftPressed, ctrlPressed) {
 function nnDrag(x, y, shiftPressed, ctrlPressed) {
   // console.log("nnDrag");
   if (clicked !== false) {
-    var ydiff = (y - clicked.l.y1) / (clicked.l.y2 - clicked.l.y1);
+    var ydiff = (y - clicked.y) / (clicked.l.y2 - clicked.l.y1);
     var new_w = ydiff * clicked.max - clicked.min;
     net['layers'][clicked.ref[0]]["filters"][clicked.ref[1]]["w"][clicked.ref[2]] = new_w;
   }
