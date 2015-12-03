@@ -537,16 +537,29 @@ function nnMouseDown(x, y, shiftPressed, ctrlPressed) {
 
   for (var i=0;i<wlocs.length;i++){
     if (distance(x,y,wlocs[i].x,wlocs[i].y) < 8) {
-      clicked = wlocs[i];
+      clicked = {
+        x:wlocs[i].x,
+        y:wlocs[i].y,
+        l:wlocs[i].l,
+        w:wlocs[i].w,
+        d:wlocs[i].d,
+        ref:wlocs[i].ref
+      };
     }
   }
 }
 
 function nnDrag(x, y, shiftPressed, ctrlPressed) {
-  // console.log("nnDrag");
   if (clicked !== false) {
+    // console.log("nnDrag");
+    // console.log("original coords: " + clicked.x + "," + clicked.y);
+    // console.log("mouse coords: " + x + "," + y);
+    // console.log(clicked);
     var ydiff = (y - clicked.y) / (clicked.l.y2 - clicked.l.y1);
-    var new_w = ydiff * clicked.max - clicked.min;
+    // console.log("diff: " + ydiff);
+    // console.log("new_norm: " + ydiff * clicked.norm);
+    var new_w = clicked.w + ydiff * clicked.d;
+    // console.log("new_w: " + new_w);
     net['layers'][clicked.ref[0]]["filters"][clicked.ref[1]]["w"][clicked.ref[2]] = new_w;
   }
 }
