@@ -534,8 +534,6 @@ function nnDrag(x, y, shiftPressed, ctrlPressed) {
     var ydiff = (y - clicked.l.y1) / (clicked.l.y2 - clicked.l.y1);
     var new_w = ydiff * clicked.max - clicked.min;
     net['layers'][clicked.ref[0]]["filters"][clicked.ref[1]]["w"][clicked.ref[2]] = new_w;
-    updateNetVis();
-    draw();
   }
 }
 
@@ -583,8 +581,6 @@ function nnMouseUp(x, y, shiftPressed, ctrlPressed){
     clicked_circle.s = true; //I'm sure there's a more elegant way to do this but w/e
   }
   clicked = false;
-  updateNetVis();
-  draw();
 }
 
 
@@ -608,7 +604,7 @@ $(function() {
     circle_data();
     $("#layerdef").val(t);
     reload();
-    NPGinit(20);
+    NPGinit();
     resetNetVis();
 });
 

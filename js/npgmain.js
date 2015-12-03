@@ -150,7 +150,7 @@ function NPGinit(FPS){
   document.addEventListener('keyup', eventKeyUp, true);
   document.addEventListener('keydown', eventKeyDown, true);
   
-  setInterval(NPGtick, 1000/FPS);
+  window.requestAnimationFrame(NPGtick);
   
   myinit();
 }
@@ -158,4 +158,5 @@ function NPGinit(FPS){
 function NPGtick() {
     update();
     draw();
+    window.requestAnimationFrame(NPGtick);
 }
