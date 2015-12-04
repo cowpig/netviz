@@ -7,8 +7,8 @@ var layer_defs, net, trainer;
 var t = "\n\
 layer_defs = [];\n\
 layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:2});\n\
-layer_defs.push({type:'fc', num_neurons:6, activation: 'tanh'});\n\
-layer_defs.push({type:'fc', num_neurons:2, activation: 'tanh'});\n\
+layer_defs.push({type:'fc', num_neurons:8, activation: 'tanh'});\n\
+layer_defs.push({type:'fc', num_neurons:3, activation: 'tanh'});\n\
 layer_defs.push({type:'softmax', num_classes:2});\n\
 \n\
 net = new convnetjs.Net();\n\
@@ -393,7 +393,7 @@ function resetNetVis()
 
   ///////////////////////////////////////
   // draw the neural network's architecture
-  nnctx.font = "30px Arial";
+  nnctx.font = "36px Arial";
   nnctx.fillStyle = "black";
   var left = (nncw - "INPUT".length*20 - pad*2) / 2 + ("INPUT".length*20 /2);
   var top = pad+30
@@ -421,9 +421,8 @@ function resetNetVis()
   // var top = top + 30;
   for(var i=0;i<nodes[0].length;i++){
     c = nodes[0][i];
-    c.ins.push({'x1':left, 'y1':top+pad/2, 'x2':c['x'], 'y2':c['y']-radi, 's':false})
-    var right = left + "INPUT".length * 20;
-    c.ins.push({'x1':right, 'y1':top+pad/2, 'x2':c['x'], 'y2':c['y']-radi, 's':false})
+    c.ins.push({'x1':nncw/3, 'y1':top+pad/2, 'x2':c['x'], 'y2':c['y']-radi, 's':false})
+    c.ins.push({'x1':nncw*2/3, 'y1':top+pad/2, 'x2':c['x'], 'y2':c['y']-radi, 's':false})
   }
   // add rest of conns
   for(var i=0;i<nodes.length-1;i++){
@@ -504,9 +503,9 @@ function updateNetVis() {
         wlocs.push({'x': normx, 'y': normy, 'w': w[k], 'norm':norm, 'l':l, 
                 'ref':[ix,j,k], 'min':mm.minv, 'max':mm.maxv, 'd':mm.dv});
 
-        nnctx.lineWidth = 3;
+        nnctx.lineWidth = 4;
         drawLine(l.x1, l.y1, normx, normy, nnctx);
-        nnctx.lineWidth = 1;
+        nnctx.lineWidth = 2;
         drawLine(normx, normy, l.x2, l.y2, nnctx);
       }
     }
