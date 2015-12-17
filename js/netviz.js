@@ -7,8 +7,8 @@ var layer_defs, net, trainer;
 var t = "\n\
 layer_defs = [];\n\
 layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:2});\n\
-layer_defs.push({type:'fc', num_neurons:8, activation: 'tanh'});\n\
-layer_defs.push({type:'fc', num_neurons:3, activation: 'tanh'});\n\
+layer_defs.push({type:'fc', num_neurons:4, activation: 'tanh'});\n\
+layer_defs.push({type:'fc', num_neurons:2, activation: 'tanh'});\n\
 layer_defs.push({type:'softmax', num_classes:2});\n\
 \n\
 net = new convnetjs.Net();\n\
