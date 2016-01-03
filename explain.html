@@ -1,14 +1,41 @@
+<!DOCTYPE html>
 <html>
 <head>
-<title>Understanding Neural Networks</title>
+<meta charset="UTF-8"> 
+
+<!-- for displaying math as latex -->
+<link rel="stylesheet" href="katex/katex.min.css">
+<script src="katex/katex.min.js"></script>
+<script src="katex/auto-render.min.js"></script>
+
+<script src="js/explain.js"></script> 
+
+<style type="text/css">
+#wrapper{
+	width: 980px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-bottom: 200px;
+}
+canvas { 
+    border: 1px solid #555;
+}
+</style>
+
+<title>A Visual Explanation of Neural Networks</title>
 </head>
 <body>
+<div id="wrapper">
+
+<h3> Neurons </h3>
+<p>An artificial neural network consists of many interconnected units of computation that are modeled after the <a href="https://en.wikipedia.org/wiki/Neuron">elecrically-activated cells</a> in our brains and spinal cords. Neurons recieve inputs from  other activated neurons, and when the weighted sum of those inputs exceeds a threshold, it becomes active itself.</p>
+<p>Mathematically speaking, the input to a neuron is the <a href="https://en.wikipedia.org/wiki/Linear_function">linear function</a> </p>
+<p> $( f(x_0, x_1)=w_0 x_0 + w_1 x_1 )$ </p>
+<p> where </p>
+<p> $( x_0, x_1 )$ are the outputs of the incoming neurons, and</p>
+<p> $( w_0, w_1 )$ are how much each of those inputs is weighted.</p>
 <p>
-If you've searched for explanations of neural networks on the internet, you've probably seen two kinds of things: 
-</p>
-<p>
-<!-- show a graph of nodes here -->
-Diagrams of nodes
+	<canvas id="one_neuron" width="400" height="400"> No canvas support. Get a real browser. </canvas>
 </p>
 <p>
 <!-- show a mathematical equation here -->
@@ -27,5 +54,12 @@ These two representations of neural networks are at two different levels of abst
 - Gradient descent
 - Putting it all together
 -->
+
+</div>
+<script>
+options = {'delimiters': [ {left: "$[", right: "]$", display: true},
+  						   {left: "$(", right: ")$", display: false} ]};
+renderMathInElement(document.body, options);
+</script>
 </body>
 </html>
