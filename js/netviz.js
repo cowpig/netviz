@@ -7,8 +7,9 @@ var layer_defs, net, trainer;
 var t = "\n\
 layer_defs = [];\n\
 layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:2});\n\
-layer_defs.push({type:'fc', num_neurons:4, activation: 'tanh'});\n\
-layer_defs.push({type:'fc', num_neurons:2, activation: 'tanh'});\n\
+layer_defs.push({type:'fc', num_neurons:8, activation: 'relu'});\n\
+layer_defs.push({type:'fc', num_neurons:6, activation: 'relu'});\n\
+layer_defs.push({type:'fc', num_neurons:6, activation: 'relu'});\n\
 layer_defs.push({type:'softmax', num_classes:2});\n\
 \n\
 net = new convnetjs.Net();\n\
@@ -24,11 +25,14 @@ function reload() {
   var t = '';
   for(var i=1;i<net.layers.length-1;i++) { // ignore input and regression layers (first and last)
     var butid = "button" + i;
-    t += "<input id=\""+butid+"\" value=\"" + net.layers[i].layer_type + "(" + net.layers[i].out_depth + ")" +"\" type=\"submit\" onclick=\"updateLix("+i+")\" style=\"width:80px; height: 30px; margin:5px;\";>";
+    t += "<input id=\""+butid+"\" value=\"" + net.layers[i].layer_type + 
+        "(" + net.layers[i].out_depth + ")" + "\" type=\"submit\" onclick=\"updateLix(" +
+          i + ")\" style=\"width:80px; height: 30px; margin:5px;\";>";
   }
   $("#layer_ixes").html(t);
   $("#button"+lix).css('background-color', '#FFA');
-  $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')');
+  $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + 
+    ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')');
 
   updateNetVis();
 }
@@ -40,7 +44,8 @@ function updateLix(newlix) {
   d1 = 1; // reset these
   $("#button"+lix).css('background-color', '#FFA');
 
-  $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')');
+  $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + 
+    lix + ' (' + net.layers[lix].layer_type + ')');
 }
  
 
@@ -113,6 +118,20 @@ function spiral_data() {
   N = data.length;
 }
 
+function concentric_rings() {
+  data = [];
+  labels = [];
+  for(var r=1; r<5; r++) {
+    for (var i=0; i<r*25; i++) {
+      var rad = r - convnetjs.randf(0.5, 1.0);
+      var t = convnetjs.randf(0.0, 2*Math.PI);
+      data.push([rad*Math.sin(t), rad*Math.cos(t)]);
+      labels.push(r % 2);
+    }
+  }
+  N = data.length;
+}
+
 function update(){
   // console.log("update");
   if (clicked === false){
@@ -147,7 +166,8 @@ function cycle() {
   d1 += 1;
   if(d1 >= selected_layer.out_depth) d1 = 0; // and wrap
   if(d0 >= selected_layer.out_depth) d0 = 0; // and wrap
-  $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + ' of layer #' + lix + ' (' + net.layers[lix].layer_type + ')');
+  $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + ' of layer #' + lix + 
+      ' (' + net.layers[lix].layer_type + ')');
 }
 
 var lix = 4; // layer id to track first 2 neurons of
