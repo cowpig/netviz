@@ -7,9 +7,9 @@ var layer_defs, net, trainer;
 var t = "\n\
 layer_defs = [];\n\
 layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:2});\n\
-layer_defs.push({type:'fc', num_neurons:8, activation: 'relu'});\n\
 layer_defs.push({type:'fc', num_neurons:6, activation: 'relu'});\n\
-layer_defs.push({type:'fc', num_neurons:6, activation: 'relu'});\n\
+layer_defs.push({type:'fc', num_neurons:3, activation: 'relu'});\n\
+layer_defs.push({type:'fc', num_neurons:2, activation: 'relu'});\n\
 layer_defs.push({type:'softmax', num_classes:2});\n\
 \n\
 net = new convnetjs.Net();\n\
@@ -79,6 +79,13 @@ function original_data(){
   data.push([1.0 ,   -2.2  ]); labels.push(1);
   N = labels.length;
 }
+
+function clear_data(){  
+  data = [];
+  labels = [];
+  N = labels.length;
+}
+
 
 function circle_data() {
   data = [];
