@@ -1876,6 +1876,13 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       }
       return maxi; // return index of the class with highest class probability
     },
+    clone: function() {
+      cloned = new Net();
+      for (var i=0;i<this.layers.length;i++){
+        cloned.layers.push(this.layers[i].clone());
+      }
+      return cloned;
+    },
     toJSON: function() {
       var json = {};
       json.layers = [];

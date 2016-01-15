@@ -2,6 +2,15 @@ var train = false;
 var data, labels, N;
 var ss = 50.0; // scale for drawing
 
+// keep track of training history
+// {
+//   "state"  : (clone of net object), 
+//   "trained": (false if the result of user-manipulation), 
+//   "childs": (array of pointers to next node in history)
+// }
+var hist = null; 
+var head = hist;
+
 // create neural net
 var layer_defs, net, trainer;
 var t = "\n\
@@ -34,6 +43,8 @@ function reload() {
   $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + 
     ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')');
 
+  reset_hist();
+  resetNetVis();
   updateNetVis();
 }
 
@@ -144,7 +155,7 @@ function update(){
   if (clicked === false){
     if (train) {
       // forward prop the data
-
+      commit_hist();
       var start = new Date().getTime();
 
       var x = new convnetjs.Vol(1,1,2);
@@ -162,9 +173,33 @@ function update(){
       var end = new Date().getTime();
       var time = end - start;
           
+      add_hist(true)
       // console.log('loss = ' + avloss + ', 100 cycles through data in ' + time + 'ms');
     }
   }
+}
+
+function reset_hist(){
+  hist = head = {
+    "state" : net,
+    "trained" : false,
+    "childs" : []
+  }
+}
+function add_hist(trained){
+  if (head.state === net) {
+    throw "need to commit history before adding to it";
+  }
+  var temp = {
+    "state"  : net, 
+    "trained": trained,
+    "childs": []
+  }
+  head.childs.push(temp);
+  head = temp;
+}
+function commit_hist(){
+  head.state = net.clone();
 }
 
 function cycle() {
@@ -407,6 +442,8 @@ function resetNetVis()
   //  that passes that result into an activation function (tanh / sigmoid / relu)
   var nn_nodes = []; 
   var synaps = [];
+  nodes = [];
+  wlocs = []; // objs on connection lines that represent weights
   for (var i=1;i<net.layers.length;i++) {
     if (i%2 == 0) {
       nn_nodes.push(net.layers[i]);
@@ -461,7 +498,6 @@ function resetNetVis()
       }
     }
   }
-
   // updateNetVis();
 }
 
@@ -510,7 +546,12 @@ function updateNetVis() {
         var l = c.ins[k];
         // console.log(w);
         // console.log(mm);
+        try{
+
         var norm = (w[k] - mm.minv) / mm.dv;
+        } catch (err){
+          debugger;
+        }
         // console.log("norm " + norm);
         // console.log("drawing a circle size " + 5 + " at: " + normx + " " + normy);
 
@@ -577,6 +618,10 @@ function nnMouseDown(x, y, shiftPressed, ctrlPressed) {
 
 function nnDrag(x, y, shiftPressed, ctrlPressed) {
   if (clicked !== false) {
+    if (head.trained) {
+      commit_hist();
+      add_hist(false);
+    }
     // console.log("nnDrag");
     // console.log("original coords: " + clicked.x + "," + clicked.y);
     // console.log("mouse coords: " + x + "," + y);
@@ -658,6 +703,5 @@ $(function() {
     $("#layerdef").val(t);
     reload();
     NPGinit();
-    resetNetVis();
 });
 
