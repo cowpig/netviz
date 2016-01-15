@@ -17,7 +17,7 @@
 	margin-left: auto;
 	margin-bottom: 200px;
 }
-canvas { 
+canvas.bordered { 
     border: 1px solid #555;
 }
 </style>
@@ -26,16 +26,22 @@ canvas {
 </head>
 <body>
 <div id="wrapper">
+<h3> Intelligence </h3>
+<p> I've been fascinated by cognition for as long as I can remember. Intelligence is the defining charactistic of humankind, and so mysterious that there remain <a href="http://plato.stanford.edu/entries/dualism/#MinBodHisDua">active debates</a> among philosophers as to whether our minds are governed by the same natural laws as our physical bodies.</p>
+<p> I've always felt that, to understand intelligence, we should study the brain. 
 
 <h3> Neurons </h3>
-<p>An artificial neural network consists of many interconnected units of computation that are modeled after the <a href="https://en.wikipedia.org/wiki/Neuron">elecrically-activated cells</a> in our brains and spinal cords. Neurons recieve inputs from  other activated neurons, and when the weighted sum of those inputs exceeds a threshold, it becomes active itself.</p>
+<p>An artificial neural network consists of many interconnected units of computation that are modeled after the <a href="https://en.wikipedia.org/wiki/Neuron">elecrically-activated cells</a> in our brains and spinal cords. They looks kind of like this:</p>
+
+<p>Neurons recieve inputs from  other activated neurons, and when the weighted sum of those inputs exceeds a threshold, it becomes active itself.</p>
 <p>Mathematically speaking, the input to a neuron is the <a href="https://en.wikipedia.org/wiki/Linear_function">linear function</a> </p>
 <p> $( f(x_0, x_1)=w_0 x_0 + w_1 x_1 )$ </p>
 <p> where </p>
 <p> $( x_0, x_1 )$ are the outputs of the incoming neurons, and</p>
 <p> $( w_0, w_1 )$ are how much each of those inputs is weighted.</p>
 <p>
-	<canvas id="one_neuron" width="400" height="400"> No canvas support. Get a real browser. </canvas>
+	<canvas id="part1_crtl" width="400" height="400"></canvas>
+	<canvas id="part1_actv" width="400" height="400" class="bordered"></canvas>
 </p>
 <p>
 <!-- show a mathematical equation here -->

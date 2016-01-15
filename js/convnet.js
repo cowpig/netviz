@@ -488,7 +488,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return response;
     },
     clone: function() {
-      cloned = new ConvLayer();
+      var cloned = new ConvLayer();
       cloned.sx = this.sx; // filter size in x, y dims
       cloned.sy = this.sy;
       cloned.stride = this.stride;
@@ -497,7 +497,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
       cloned.l1_decay_mul = this.l1_decay_mul;
-      cloned.l2_decay_mul = this.l2_decay_mul;
+      cloned.l2_decay_mul = this.l2_decay_mul;fdaa08cf8668ee340bb38a164a0e8eb463a4ebd1
       cloned.pad = this.pad;
       cloned.filters = this.filters.clone();
       cloned.biases = this.biases.clone();
@@ -617,14 +617,14 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return response;
     },
     clone: function() {
-      cloned = new FullyConnLayer();
+      var cloned = new FullyConnLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
       cloned.num_inputs = this.num_inputs;
       cloned.l1_decay_mul = this.l1_decay_mul;
       cloned.l2_decay_mul = this.l2_decay_mul;
-      cloned.filters = this.filters.clone();
+      cloned.filters = this.filters.map(function f(vol){return vol.clone()});
       cloned.biases = this.biases.clone();
       if (this.in_act !== undefined) {
         cloned.in_act = this.in_act.clone();
@@ -769,7 +769,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new PoolLayer();
+      var cloned = new PoolLayer();
       cloned.sx = this.sx;
       cloned.sy = this.sy;
       cloned.stride = this.stride;
@@ -849,7 +849,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new InputLayer();
+      var cloned = new InputLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -954,7 +954,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new SoftmaxLayer();
+      var cloned = new SoftmaxLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1041,7 +1041,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new RegressionLayer();
+      var cloned = new RegressionLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1118,7 +1118,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new SVMLayer();
+      var cloned = new SVMLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1264,7 +1264,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new SigmoidLayer();
+      var cloned = new SigmoidLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1390,7 +1390,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new MaxoutLayer();
+      var cloned = new MaxoutLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1464,7 +1464,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new TanhLayer();
+      var cloned = new TanhLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1554,7 +1554,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return [];
     },
     clone: function() {
-      cloned = new DropoutLayer();
+      var cloned = new DropoutLayer();
       cloned.out_depth = this.out_depth;
       cloned.out_sx = this.out_sx;
       cloned.out_sy = this.out_sy;
@@ -1676,7 +1676,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
     },
     getParamsAndGrads: function() { return []; },
     clone: function() {
-      cloned = new LocalResponseNormalizationLayer();
+      var cloned = new LocalResponseNormalizationLayer();
       cloned.k = this.k;
       cloned.n = this.n;
       cloned.alpha = this.alpha; // normalize by size
@@ -1877,7 +1877,7 @@ var convnetjs = convnetjs || { REVISION: 'ALPHA' };
       return maxi; // return index of the class with highest class probability
     },
     clone: function() {
-      cloned = new Net();
+      var cloned = new Net();
       for (var i=0;i<this.layers.length;i++){
         cloned.layers.push(this.layers[i].clone());
       }

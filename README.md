@@ -14,3 +14,4 @@ This project is a direct descendant of [a demo](http://cs.stanford.edu/people/ka
 	- talk about philosophical motivation?
 - implement slider to click-and-drag through training iterations
 - come up with a good way to visualize the gradient/training steps
+- refactor netviz.js: get rid of global state, move toward functional/reactive style
