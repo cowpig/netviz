@@ -16,7 +16,7 @@ body {
 canvas { 
     border: 1px solid #555;
 }
-#history {
+#histcanvas {
   border: none;
 }
 #wrap {
@@ -49,12 +49,22 @@ input[type="submit"]
 
 <div id="wrap">
 <center>
-<canvas id="nncanvas" width="1200" height="800">Browser not supported for Canvas. Get a real browser.</canvas>
+<p> This is built on top of <a href="http://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html">Karpathy's demo</a> in his <a href="https://github.com/karpathy/convnetjs"> convnetjs library </a>.
 <br>
-<canvas id="history" width="1200" height="50"></canvas>
+Clicking on a node in the large viz will display its activation with respect to the input.
+<br>
+You may click and drag the small circles in the large viz to alter network weights. 
+<br>
+Try clicking a node and watch how changes to an incoming weight alter its activation function with respect to the activation of the node above.
+<br>
+Once you have trained the network, you can go back to previous states by clicking on the tree that will show up directly below.
+</p>
+<canvas id="histcanvas" width="1200" height="50"></canvas>
 <br>
 <input id="toggletrain" type="submit" value="start training" onclick="toggleTrain()" style="width: 300px; height: 50px;"/> 
 <input id="steptrain" type="submit" value="training step" onclick="stepTrain()" style="width: 300px; height: 50px;"/>
+<br>
+<canvas id="nncanvas" width="1200" height="800">Browser not supported for Canvas. Get a real browser.</canvas>
 <br>
 <div class="panes">
 <div class="pane">

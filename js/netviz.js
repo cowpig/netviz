@@ -16,8 +16,7 @@ var layer_defs, net, trainer;
 var t = "\n\
 layer_defs = [];\n\
 layer_defs.push({type:'input', out_sx:1, out_sy:1, out_depth:2});\n\
-layer_defs.push({type:'fc', num_neurons:6, activation: 'relu'});\n\
-layer_defs.push({type:'fc', num_neurons:3, activation: 'relu'});\n\
+layer_defs.push({type:'fc', num_neurons:5, activation: 'relu'});\n\
 layer_defs.push({type:'fc', num_neurons:2, activation: 'relu'});\n\
 layer_defs.push({type:'softmax', num_classes:2});\n\
 \n\
@@ -197,9 +196,57 @@ function add_hist(trained){
   }
   head.childs.push(temp);
   head = temp;
+
+  display_hist();
 }
 function commit_hist(){
   head.state = net.clone();
+}
+function display_hist(){
+  var hist_depth = 1;
+  var hist_width = 1;
+  // BFS to find dimensions of the history tree
+  var curr = [hist];
+  var next = [];
+  var iters = 0;
+  while (curr.length > 0) {
+    next = [];
+    curr.forEach(function(node){
+      node.childs.forEach(function(child){
+        next.push(child);
+      });
+    });
+    hist_depth++;
+    if (next.length > hist_width) {
+      hist_width = next.length;
+    }
+    curr = next;
+  }
+  histcanvas.height = 40 + 20*hist_width;
+  histctx.clearRect(0,0,histctx.width,histctx.height);
+  var w = Math.min(20, (histcanvas.width-40)/hist_depth);
+  // DFS to draw the tree
+  var drawnodes = function(node, x, y) {
+    var size = 5;
+    node.childs.forEach(function (child, idx) {
+      drawLine(x, y, x+w, y+(idx*20), histctx);
+      drawnodes(child, x+w, y+(idx*20));
+    });
+    if (node === head) {
+      histctx.fillStyle = "black";
+      drawCircle(x, y, 8, histctx);
+    }
+    if (node.trained) {
+      histctx.fillStyle = "grey";
+    } else {
+      histctx.fillStyle = "purple";
+    }
+    drawCircle(x, y, 5, histctx);
+    // need these later for histOver and histClick
+    node['x'] = x;
+    node['y'] = y;
+  };
+  drawnodes(hist, 20, 20);
 }
 
 function cycle() {
@@ -365,7 +412,6 @@ function draw(){
       visctx.stroke();
       visctx.fill();
     }
-
     updateNetVis();
 }
 
@@ -681,6 +727,51 @@ function nnMouseUp(x, y, shiftPressed, ctrlPressed){
   clicked = false;
 }
 
+// returns [ closest_node, distance_to_node ]
+function closestHistNode(x, y, node) {
+  if (node === undefined) {node = hist;}
+  if (node.x === undefined) {return null;}
+  // debugger;
+  var closest = [node, distance(x, y, node.x, node.y)];
+  node.childs.forEach(function (child) {
+    var candidate = closestHistNode(x, y, child);
+    if (candidate[1] < closest[1]) {
+      closest = candidate;
+    }
+  });
+  return closest;
+}
+function histOver(x, y, ctrlPressed, shiftPressed){
+  closest = closestHistNode(x, y);
+  console.log(closest);
+  if (closest === null) {return;}
+  if (closest[1] < radi) {
+    if (head.state === net) {
+      commit_hist();
+    }
+    train = false;
+    net = closest[0].state;
+    trainer.net = net;
+  }
+}
+function histLeave(x, y, ctrlPressed, shiftPressed){
+  net = head.state;
+  trainer.net = net;
+}
+function histClick(x, y, ctrlPressed, shiftPressed){
+  closest = closestHistNode(x, y);
+  if (closest === null) {return;}
+  if (closest[1] < radi) {
+    if (head.state === net) {
+      commit_hist();
+    }
+    train = false;
+    head = closest[0];
+    net = head.state;
+    trainer.net = net;
+    display_hist();
+  }
+}
 
 $(function() {
     // note, globals
@@ -696,8 +787,14 @@ $(function() {
     nncanvas.addEventListener('mousemove', eventClickGen(nnDrag, nncanvas), false);
     nncanvas.addEventListener('mouseleave', eventClickGen(nnLeave, nncanvas), false);
 
-    nodecanvas =  document.getElementById("nodecanvas");
+    nodecanvas = document.getElementById("nodecanvas");
     nodectx = nodecanvas.getContext("2d");
+
+    histcanvas = document.getElementById("histcanvas");
+    histcanvas.addEventListener('mousemove', eventClickGen(histOver, histcanvas), false);
+    histcanvas.addEventListener('mouseleave', eventClickGen(histLeave, histcanvas), false);
+    histcanvas.addEventListener('click', eventClickGen(histClick, histcanvas), false);
+    histctx = histcanvas.getContext("2d");
 
     circle_data();
     $("#layerdef").val(t);
