@@ -731,7 +731,6 @@ function nnMouseUp(x, y, shiftPressed, ctrlPressed){
 function closestHistNode(x, y, node) {
   if (node === undefined) {node = hist;}
   if (node.x === undefined) {return null;}
-  // debugger;
   var closest = [node, distance(x, y, node.x, node.y)];
   node.childs.forEach(function (child) {
     var candidate = closestHistNode(x, y, child);
@@ -743,7 +742,6 @@ function closestHistNode(x, y, node) {
 }
 function histOver(x, y, ctrlPressed, shiftPressed){
   closest = closestHistNode(x, y);
-  console.log(closest);
   if (closest === null) {return;}
   if (closest[1] < radi) {
     if (head.state === net) {
