@@ -8,8 +8,6 @@ This project is a direct descendant of [a demo](http://cs.stanford.edu/people/ka
 
 # TODO
 
-- fix the early-branch drawing over thing (recurse w/callbacks?)
-- make it easier to replay a branch of the training history
 - come up with a good way to visualize the gradient/training steps
 - so much refactor
 - flesh out the explanation/tutorial

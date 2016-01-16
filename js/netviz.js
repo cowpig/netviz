@@ -204,8 +204,7 @@ function commit_hist(){
 }
 function display_hist(){
   var hist_depth = 1;
-  var hist_width = 1;
-  // BFS to find dimensions of the history tree
+  // BFS to find the depth of the history tree
   var curr = [hist];
   var next = [];
   var iters = 0;
@@ -217,20 +216,37 @@ function display_hist(){
       });
     });
     hist_depth++;
-    if (next.length > hist_width) {
-      hist_width = next.length;
-    }
     curr = next;
   }
+  // DFS to get the max width of each node's descendant branches
+  var n_branches = function(node) {
+    if (node.childs.length === 0) {
+      node['branch_width'] = 0;
+      return 0;
+    }
+    var branches = node.childs.length - 1;
+    var maxw = node.childs.map(n_branches).reduce(function(a,b){return a+b;}, 0);
+    node['branch_width'] = maxw;
+    return branches + maxw;
+  }
+
+  var hist_width = n_branches(hist) + 1;
+
   histcanvas.height = 40 + 20*hist_width;
   histctx.clearRect(0,0,histctx.width,histctx.height);
+
   var w = Math.min(20, (histcanvas.width-40)/hist_depth);
-  // DFS to draw the tree
   var drawnodes = function(node, x, y) {
     var size = 5;
+    var width = node.branch_width;
     node.childs.forEach(function (child, idx) {
-      drawLine(x, y, x+w, y+(idx*20), histctx);
-      drawnodes(child, x+w, y+(idx*20));
+      if (idx > 0) {
+        drawLine(x, y, x+w, y+(idx+width)*20, histctx);
+        drawnodes(child, x+w, y+(idx+width)*20);
+      } else {
+        drawLine(x, y, x+w, y, histctx);
+        drawnodes(child, x+w, y);
+      }
     });
     if (node === head) {
       histctx.fillStyle = "black";
@@ -666,6 +682,8 @@ function nnDrag(x, y, shiftPressed, ctrlPressed) {
   if (clicked !== false) {
     if (head.trained) {
       commit_hist();
+      add_hist(false);
+    } else if (head.childs.length > 0) {
       add_hist(false);
     }
     // console.log("nnDrag");
