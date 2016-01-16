@@ -8,10 +8,11 @@ This project is a direct descendant of [a demo](http://cs.stanford.edu/people/ka
 
 # TODO
 
+- fix the early-branch drawing over thing (recurse w/callbacks?)
+- make it easier to replay a branch of the training history
+- come up with a good way to visualize the gradient/training steps
+- so much refactor
 - flesh out the explanation/tutorial
 	- combine symbolic and graphical representations?
 	- talk about biological motivation?
 	- talk about philosophical motivation?
-- implement slider to click-and-drag through training iterations
-- come up with a good way to visualize the gradient/training steps
-- refactor netviz.js: get rid of global state, move toward functional/reactive style
