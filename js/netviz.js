@@ -233,7 +233,7 @@ function display_hist(){
     }
     var branches = node.childs.length - 1;
     var maxw = node.childs.map(n_branches).reduce(function(a,b){return a+b;}, 0);
-    node['branch_width'] = maxw;
+    node['branch_width'] = maxw + branches;
     return branches + maxw;
   }
 
@@ -245,15 +245,11 @@ function display_hist(){
   var w = Math.min(20, (histcanvas.width-40)/hist_depth);
   var drawnodes = function(node, x, y) {
     var size = 5;
-    var width = node.branch_width;
+    var next_y = y;
     node.childs.forEach(function (child, idx) {
-      if (idx > 0) {
-        drawLine(x, y, x+w, y+(idx+width)*20, histctx);
-        drawnodes(child, x+w, y+(idx+width)*20);
-      } else {
-        drawLine(x, y, x+w, y, histctx);
-        drawnodes(child, x+w, y);
-      }
+      drawLine(x, y, x+w, next_y, histctx);
+      drawnodes(child, x+w, next_y);
+      next_y += child.branch_width * 20 + 20;
     });
     if (node === head) {
       histctx.fillStyle = "black";
@@ -790,6 +786,7 @@ function histClick(x, y, ctrlPressed, shiftPressed){
     }
     train = false;
     head = closest[0];
+    console.log(head);
     net = head.state;
     trainer.net = net;
     display_hist();
