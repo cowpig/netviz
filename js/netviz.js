@@ -43,6 +43,7 @@ function reload() {
     ' of layer with index ' + lix + ' (' + net.layers[lix].layer_type + ')');
 
   reset_hist();
+  display_hist();
   resetNetVis();
   updateNetVis();
 }
@@ -186,7 +187,7 @@ function reset_hist(){
   }
 }
 function add_hist(trained){
-  if (head.state === net) {
+  if (head.state === net && head.childs.length < 1) {
     throw "need to commit history before adding to it";
   }
   var temp = {
@@ -203,6 +204,12 @@ function commit_hist(){
   head.state = net.clone();
 }
 function display_hist(){
+  if (hist.childs.length === 0){
+    histcanvas.height = 50;
+    histctx.clearRect(0,0,histctx.width,histctx.height);
+    return;
+  }
+
   var hist_depth = 1;
   // BFS to find the depth of the history tree
   var curr = [hist];
