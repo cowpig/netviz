@@ -58,9 +58,6 @@ function updateLix(newlix) {
   $("#cyclestatus").html('drawing neurons ' + d0 + ' and ' + d1 + ' of layer with index ' + 
     lix + ' (' + net.layers[lix].layer_type + ')');
 }
- 
-
-function myinit() { }
 
 function random_data(){
   data = [];
@@ -469,6 +466,14 @@ function mouseClick(x, y, shiftPressed, ctrlPressed){
 
 }
 
+function mouseMove(x, y, shiftPressed, ctrlPressed){
+  // Show node activations by adding a % alpha
+}
+
+function mouseLeave(x, y, shiftPressed, ctrlPressed){
+  // reset alpha to 0 everywhere
+}
+
 function keyDown(key){
 }
 
@@ -794,6 +799,14 @@ function histClick(x, y, ctrlPressed, shiftPressed){
 }
 
 $(function() {
+    canvas = document.getElementById('NPGcanvas');
+    ctx = canvas.getContext('2d');
+    WIDTH = canvas.width;
+    HEIGHT = canvas.height;
+    canvas.addEventListener('click', eventClickGen(mouseClick, canvas), false);
+    canvas.addEventListener('mousemove', eventClickGen(mouseMove, canvas), false);
+    canvas.addEventListener('mouseleave', eventClickGen(mouseLeave, canvas), false);
+
     // note, globals
     viscanvas = document.getElementById('viscanvas');
     visctx = viscanvas.getContext('2d');

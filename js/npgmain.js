@@ -4,7 +4,6 @@
 //This function does all the boring canvas stuff. To use it, just create functions:
 //update()          gets called every frame
 //draw()            gets called every frame
-//myinit()          gets called once in beginning
 //mouseClick(x, y)  gets called on mouse click
 //keyUp(keycode)    gets called when key is released
 //keyDown(keycode)  gets called when key is pushed
@@ -143,14 +142,6 @@ function blackWhiteScale(value){
 }
 
 function NPGinit(FPS){
-  //takes frames per secont to run at
-  
-  canvas = document.getElementById('NPGcanvas');
-  ctx = canvas.getContext('2d');
-  WIDTH = canvas.width;
-  HEIGHT = canvas.height;
-  canvas.addEventListener('click', eventClickGen(mouseClick, canvas), false);
-  
   //canvas element cannot get focus by default. Requires to either set 
   //tabindex to 1 so that it's focusable, or we need to attach listeners
   //to the document. Here we do the latter
@@ -158,8 +149,7 @@ function NPGinit(FPS){
   document.addEventListener('keydown', eventKeyDown, true);
   
   window.requestAnimationFrame(NPGtick);
-  
-  myinit();
+
 }
 
 function NPGtick() {
