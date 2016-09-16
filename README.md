@@ -6,11 +6,6 @@ The goal of this project is to build a tool for understanding how neural network
 
 This project is a direct descendant of [a demo](http://cs.stanford.edu/people/karpathy/convnetjs/demo/classify2d.html) in [Karpathy's ConvnetJS library](https://github.com/karpathy/convnetjs).
 
-# TODO
+# Try it out!
 
-- come up with a good way to visualize the gradient/training steps
-- so much refactor
-- flesh out the explanation/tutorial
-	- combine symbolic and graphical representations?
-	- talk about biological motivation?
-	- talk about philosophical motivation?
+[Try the working demo here](http://cowpig.github.io/netviz/viz.html)
