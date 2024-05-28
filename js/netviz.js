@@ -497,8 +497,8 @@ function stepTrain() {
 }
 
 // globals for neural network structure visualization
-var pad = 40;
-var radi = 20;
+var pad = 20;
+var radi = 10;
 var nncanvas;
 var nnctx;
 var nodes = [];
@@ -660,7 +660,7 @@ function drawWeights() {
     nnctx.fillStyle = blackWhiteScale(1-w.norm);
     // console.log(w.unit_norm);
     // console.log(nnctx.fillStyle);
-    drawCircle(w.x, w.y, 7, nnctx);
+    drawCircle(w.x, w.y, 5, nnctx);
   }
 }
 
